@@ -152,7 +152,7 @@ services:
    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
    - ./nginx/mysite.template:/etc/nginx/conf.d/default.conf:ro
    ports:
-   - 8443:443
+   - 443:443
    links:
    - guacamole
    networks:
@@ -161,4 +161,21 @@ services:
    command: /bin/bash -c "nginx -g 'daemon off;'"
 # nginx-debug-mode
 #   command: /bin/bash -c "nginx-debug -g 'daemon off;'"
+####################################################################################
+
+########### optional ##############
+  # npc
+  npc:
+   container_name: npc_reverse_proxy
+   restart: always
+   environment:
+     npserver: nps.thingsroot.com:7088
+     npckey: guacd_key
+   image: viccomdong/npc:v1
+   links:
+   - guacamole
+   networks:
+     guacnetwork_compose:
+   # run npc
+
 ####################################################################################
