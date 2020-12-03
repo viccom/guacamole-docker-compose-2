@@ -19,9 +19,9 @@ cd guacamole-docker-compose-2
 docker-compose up -d
 ~~~
 
-Your guacamole server should now be available at `https://ip of domain:443/`. 
-The default username : guacadmin 
-The default password : guacadmin
+Your guacamole server should now be available at `https://ip of domain:443/`.   
+The default username : guacadmin   
+The default password : guacadmin  
 
 ## Details
 To understand some details let's take a closer look at parts of the `docker-compose.yml` file:
