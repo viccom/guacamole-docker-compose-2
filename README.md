@@ -132,7 +132,9 @@ The following part of docker-compose.yml will create an instance of nginx that m
 ...
 ~~~
 
-#### npc
+
+#### npc  
+
 The following part of docker-compose.yml will create an instance of npc that map the Guacamole to internet. before you use npc, You need to set up an nps server on the Internet . Please refer to "https://ehang-io.github.io/nps/#/install" for the installation of nps server.
 
 ~~~python
