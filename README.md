@@ -13,13 +13,15 @@ You need a working **docker** installation and **docker-compose** running on you
 Clone the GIT repository and start guacamole:
 
 ~~~bash
-git clone "https://github.com/boschkundendienst/guacamole-docker-compose.git"
-cd guacamole-docker-compose
+git clone "https://github.com/viccom/guacamole-docker-compose-2.git"
+cd guacamole-docker-compose-2
 ./prepare.sh
 docker-compose up -d
 ~~~
 
-Your guacamole server should now be available at `https://ip of your server:8443/`. The default username is `guacadmin` with password `guacadmin`.
+Your guacamole server should now be available at `https://ip of domain:443/`. 
+The default username : guacadmin 
+The default password : guacadmin
 
 ## Details
 To understand some details let's take a closer look at parts of the `docker-compose.yml` file:
@@ -106,9 +108,9 @@ The following part of docker-compose.yml will create an instance of guacamole by
 ~~~
 
 #### nginx
-The following part of docker-compose.yml will create an instance of nginx that maps the public port 8443 to the internal port 443. The internal port 443 is then mapped to guacamole using the `./nginx.conf` and `./nginx/mysite.template` files. The container will use the previously generated (`prepare.sh`) self-signed certificate in `./nginx/ssl/` with `./nginx/ssl/self-ssl.key` and `./nginx/ssl/self.cert`.
+The following part of docker-compose.yml will create an instance of nginx that maps the public port 443 to the internal port 443. The internal port 443 is then mapped to guacamole using the `./nginx.conf` and `./nginx/mysite.template` files. The container will use the previously generated (`prepare.sh`) self-signed certificate in `./nginx/ssl/` with `./nginx/ssl/self-ssl.key` and `./nginx/ssl/self.cert`.
 
-~~~python
+
 ...
   nginx:
    container_name: nginx_guacamole_compose
@@ -120,13 +122,32 @@ The following part of docker-compose.yml will create an instance of nginx that m
    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
    - ./nginx/mysite.template:/etc/nginx/conf.d/default.conf:ro
    ports:
-   - 8443:443
+   - 443:443
    links:
    - guacamole
    networks:
      guacnetwork_compose:
    # run nginx
    command: /bin/bash -c "nginx -g 'daemon off;'"
+...
+~~~
+
+#### npc
+The following part of docker-compose.yml will create an instance of npc that map the Guacamole to internet. before you use npc, You need to set up an nps server on the Internet . Please refer to "https://ehang-io.github.io/nps/#/install" for the installation of nps server.
+
+~~~python
+...
+  npc:
+   container_name: npc_reverse_proxy
+   restart: always
+   environment:
+     npserver: nps.thingsroot.com:7088
+     npckey: guacd_key
+   image: viccomdong/npc:v1
+   links:
+   - guacamole
+   networks:
+     guacnetwork_compose:
 ...
 ~~~
 
